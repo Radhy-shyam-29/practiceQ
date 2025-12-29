@@ -23,12 +23,16 @@
 // console.log(a.name);        // "Radhey"
 // console.log(a.marks.math); // 100 
 
-
+let name  = 'rrrr'
+age  = 44
 let obj = {
-  data: { score: 10, marks  :  35}
+  data: { score: 10, marks  :  35},
+  name,
+  age,
 };
-
-Object.freeze(obj);
-obj.data.score = 99;
-
 console.log(obj);
+
+// Object.freeze(obj);
+// obj.data.score = 99;
+
+// console.log(obj);
