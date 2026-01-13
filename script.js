@@ -409,7 +409,7 @@
 //     let sub = str.substring(i, j);
 //     temp.push(sub);
 
-//     // 👇 DISTINCT CHECK (simple)
+//     //  DISTINCT CHECK (simple)
 //     if (!distinct.includes(sub)) {
 //       distinct.push(sub);
 //     }
@@ -441,3 +441,12 @@
 //   } all.push(temp)
 // }
 // console.log(all,distinct)
+
+// abc = 10
+
+// function hello(){
+//     console.log(abc)
+// }
+// hello()
+
+
