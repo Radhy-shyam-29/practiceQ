@@ -95,3 +95,117 @@
 //     console.log(str[i])
 // }
 
+// const data = [
+//   1,
+//   2,
+//   [3, 4, [5, 6]],
+//   {
+//     name: "Rohit",
+//     skills: ["JS", "React", ["Node", "Mongo"]],
+//     address: {
+//       city: "Delhi",
+//       pin: 110001
+//     }
+//   }
+// ];
+
+// // let deep = JSON.parse(JSON.stringify(data))
+
+// function checking(value){
+//   if(typeof value !== 'object' || value === null){
+//     return value
+//   }
+//   let deepest = Array.isArray(value) ? [] : {}
+  
+//   for(let key in value){
+//     deepest[key]  = checking(value[key]);
+//   }
+//   return deepest
+//   }
+  
+//   let deepcopy = checking(data);
+  
+// function sum(...a){
+//     let total = 0
+//     for(let num of a){
+
+//         if(typeof num !== 'number'){
+//             return 'not valid number'
+//         }else{
+//             total += num
+//         }
+//     }
+//     return total
+// }
+
+// console.log(sum())
+
+
+// function sum(...a) {
+//   let total = 0;
+
+//   for (let num of a) {
+//     if (typeof num !== "number") {
+//       return "not valid number";
+//     }
+//     total += num;
+//   }
+
+//   return total;
+// }
+
+// console.log(sum(1, 2, 3, 4)); 
+
+
+// const defaults = { theme: "dark", lang: "en", notifications: true };
+// const userPrefs = { theme: "light", fontSize: 14 };
+
+// function saveSettings(...settings) {
+//   let merged = {};
+
+//   for (let set of settings) {
+//     merged = { ...merged, ...set };
+//   }
+
+//   console.log(merged);
+// }
+
+// saveSettings(defaults, userPrefs);
+
+
+
+// let n = 5
+
+// for(let i=0; i<=n; i++){
+//     let result = ''
+//   for(let j=1; j<=i; j++){
+//       result += j
+// }
+// console.log(result)
+// }
+
+
+//     A
+//    B C B
+//   C D E D C
+//  D E F G F E D
+// E F G H I H G F E
+//  D E F G F E D
+//   C D E D C
+//    B C B
+//     A
+
+// let n = 5
+
+// for(let i=0; i<=n; i++){
+//     let result = ''
+//     for(let k=5-i; k>0; k++){
+//         result += ' '
+//     }
+//     for(let j=0; j<i+1; j++){
+//         result += '*'
+//     }
+//     console.log(result)
+// }
+
+

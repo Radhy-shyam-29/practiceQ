@@ -450,3 +450,44 @@
 // hello()
 
 
+// let arr = [10,20,30,40,50,40,30,20,40,20,40]
+
+// // for(let fourties of arr){
+// //    if( fourties == 40){
+// //     console.log(fourties)
+// //    }
+// // }
+
+// for(let i in arr){
+//    if(arr[i] == 40){
+//       console.log(i)
+//    }
+// }
+
+// let x = 4
+// let arr = [1,1,1,2,2,3,3,4,4,4,5,5,6,6,6,7,8]
+
+// // for(let i in arr){
+// //     if(arr[i] == x){
+// //         console.log(i)
+// //     }
+// // }
+
+// for(let i=arr.length; i>0; i--){
+//     if(arr[i] == x){
+//         console.log(i)
+//         break;
+//     }
+// }
+
+
+let arr  = [1,3,2,6,4,8,9]
+let max = -Infinity
+for(let i=0; i<arr.length; i++){
+    if(arr[i] > arr[i-1] && arr[i] > arr[i+1]){
+        if(arr[i] > max)[
+            max = arr[i]
+        ]
+    }
+}
+console.log(max)

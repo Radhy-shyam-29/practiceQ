@@ -7,7 +7,92 @@
 </head>
 <body>
 
-    
+    <div class="app">
+  <section class="layout">
+    <aside class="sidebar">
+      <div class="menu">
+        <div class="item">
+          <span class="badge">7</span>
+        </div>
+      </div>
+    </aside>
 
+    <main class="content">
+      <article class="card">
+        <div class="card-body">
+          <button class="btn">
+            <span class="btn-text">
+              Click
+              <i class="icon">★</i>
+            </span>
+          </button>
+        </div>
+      </article>
+    </main>
+  </section>
+</div>
+
+
+<style>
+    html {
+  font-size: 16px;
+}
+
+/* ROOT LEVEL */
+.app {
+  font-size: 150%; 
+}
+
+/* LAYOUT */
+.layout {
+  font-size: 1rem;
+}
+
+/* SIDEBAR CHAIN */
+.sidebar {
+  font-size: 20px;
+}
+
+.menu {
+  font-size: 2em; 40
+}
+
+.item {
+  font-size: 150%; 60
+}
+
+.badge {
+  font-size: inherit; 60
+  padding: 50%; 30
+  border-width: 4px; 4
+}
+
+/* CONTENT CHAIN */
+.content {
+  font-size: 1.25rem;
+}
+
+.card {
+  font-size: 2em;
+}
+
+.card-body {
+  font-size: inherit;
+}
+
+.btn {
+  font-size: 1.5em; 
+  padding: 1em;
+}
+
+.btn-text {
+  font-size: unset;
+}
+
+.icon {
+  font-size: initial; 16
+}
+
+</style>
 </body>
 </html>
