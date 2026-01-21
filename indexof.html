@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <span id="user">User</span> <span id="userscore">0</span> <br />
+    <span id="pc">computer</span> <span id="pcscore">0</span>
+    <p>choose first head or tail then click on toss button</p>
+    <button id="head" class="headandtail">head</button>
+    <button id="tail" class="headandtail">Tail</button> <br />
+    <button id="toss">click me to toss</button>
+    <p id="result"></p>
+    <p id="userchoosebtn">you chose</p>
+
+    <script>
+      let result = document.querySelector("#result");
+      let toss = document.querySelector("#toss");
+
+      let headandtailbtn = document.querySelectorAll(".headandtail");
+      let userChoice = "";
+      let userchoosebtn = document.querySelector("#userchoosebtn");
+
+      headandtailbtn.forEach((btn) => {
+        btn.addEventListener("click", function (e) {
+          headandtailbtn.forEach((b) => {
+            b.style.backgroundColor = "";
+            b.style.color = "";
+            result.innerText = "";
+          });
+
+          e.target.style.backgroundColor = "blue";
+          e.target.style.color = "white";
+
+          userChoice = btn.innerText.toLowerCase();
+
+          userchoosebtn.innerText = `you choose ${userChoice}`;
+        });
+      });
+
+      toss.addEventListener("click", function () {
+        if (userChoice == "") {
+          result.innerText =
+            "for getting result first of all choose head or tail";
+          return;
+        }
+        let randomValue = Math.random();
+
+        let randomValueGenerate = "";
+        if (randomValue < 0.5) {
+          randomValueGenerate = "head";
+        } else {
+          randomValueGenerate = "tail";
+        }
+
+        if (userChoice == randomValueGenerate) {
+          result.innerText = "you win";
+        } else {
+          result.innerText = "you loss";
+        }
+      });
+    </script>
+  </body>
+</html>
