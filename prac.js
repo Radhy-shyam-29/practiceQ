@@ -328,18 +328,41 @@
 //     console.log('palindorme')
 // }
 
+let n = 9
+let value = parseInt(n/2)
 
-for (let i = 1; i <= 3; i++) {
-  for (let j = 1; j <= 2; j++) {
-    console.log(i, j);
+
+for (let i = 1; i <= n; i++) {
+  let store = ''
+  for (let j = value; j >= i; j--) {
+      store += ' '
   }
+  for(let k= 1; k<= i*2-1; k++){
+    store += k
+  }
+
+  if(i <= value+1){
+    store += ' '
+  }else{
+    store -= ' '
+  }
+  console.log(store)
 }
 
 // 
 // 
 // 
-//
+// //
 //
 //
 // 
 // 
+
+
+  // for(let i=1; i<=5; i++){
+  //   let store = ''
+  //   for(let j=i; j>=1; j--){
+  //     store += j + ' '
+  //   }
+  //   console.log(store)
+  // } 
