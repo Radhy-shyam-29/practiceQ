@@ -30,8 +30,17 @@
     <button id="endBtn"> End Button </button>
     <div id="result" ></div>
 
+    <div id="diva">
+        clock times : 
+    </div>
 
     <script>
+
+let divacess = document.querySelector('#diva')
+setInterval(()=> {
+let date = new Date()
+    divacess.innerText = ` ${date.getHours()} :  ${date.getMinutes()} : ${date.getSeconds()}`
+},1000)
 
         let playerNamesInput = document.querySelectorAll("input")
 
