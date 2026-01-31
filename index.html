@@ -1,124 +1,48 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    
-    Person1: <input type="text" value= "Ishwar">
-    <button class="roll" id="btn1">Roll the dice</button>
-    Value you Got: <span></span> <br> <br>
+  </head>
+  <body>
+    <!-- <button>0</button>
+    <button id="reset">Reset</button> -->
 
-    Person2: <input type="text" value= "Sagar">
-    <button class="roll" id="btn2">Roll the dice</button>
-    Value you Got: <span></span> <br> <br>
+    <button id="b1">btn1</button>
+    <button id="b2">btn1</button>
+    <button id="b3">btn1</button>
+    <button id="b4">btn1</button>
+    <button id="b5">btn1</button>
+    <button id="b6">btn1</button>
 
-    Person3: <input type="text" value= "Ayush">
-    <button class="roll" id="btn3">Roll the dice</button>
-    Value you Got: <span></span> <br> <br>
-
-    Person4: <input type="text" value= "Prempal">
-    <button class="roll" id="btn4">Roll the dice</button>
-    Value you Got: <span></span> <br> <br>
-
-    Person5: <input type="text" value= "Shyam">
-    <button  class="roll" id="btn5">Roll the dice</button>
-    Value you Got: <span></span> <br> <br>
-
-    <button id="endBtn"> End Button </button>
-    <div id="result" ></div>
-
-    <div id="diva">
-        clock times : 
-    </div>
+    <p id="counter">0</p>
 
     <script>
+      let counter = document.getElementById("counter");
+      let btns = document.querySelectorAll("button");
 
-let divacess = document.querySelector('#diva')
-setInterval(()=> {
-let date = new Date()
-    divacess.innerText = ` ${date.getHours()} :  ${date.getMinutes()} : ${date.getSeconds()}`
-},1000)
+      function clicked(e) {
+        counter.innerText = +counter.innerText + 1;
+      }
 
-        let playerNamesInput = document.querySelectorAll("input")
-
-        // console.log("names",playerNamesInput);
+      for (let i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", clicked);
         
-        
-        let rollBtn = document.querySelectorAll(".roll")
-        // console.log("button",rollBtn);
-        
-        let score_span = document.querySelectorAll("span")
+      }
 
-        let endBtn = document.querySelector("#endBtn")
-        let resultDiv = document.querySelector("#result")
+      // let btn = document.querySelector('button')
+      // let reset = document.querySelector('#reset')
+      // btn.addEventListener('click', clickToAdd)
+      // reset.addEventListener('click', leaving)
 
-        // disbale end btn: 
-        endBtn.disabled = true
+      // function clickToAdd(){
+      //     btn.innerText = +btn.innerText +1
+      // }
 
-
-        // roll btns addEventListener
-        
-        for(let i = 0; i<=rollBtn.length-1; i++){
-            rollBtn[i].addEventListener("click", rollTheDice)
-        }
-
-        let btnCount = 0
-        function rollTheDice(e){
-
-            // console.log("evt", e);
-            // console.log(e.target.id)
-            btnCount++ 
-
-            if(btnCount == 5){
-                 endBtn.disabled = false
-            }
-
-            let btnClicked = e.target 
-            console.log("rand",btnClicked)
-            btnClicked.disabled = true
-            let btnClickedIndex = btnClicked.id.slice(3) - 1 // -1 to convert id to index
-            // dice roll: 
-            let randomValue =  1+parseInt(Math.random()*6)
-
-            score_span[btnClickedIndex].innerText = randomValue
-
-        }
-
-
-        endBtn.addEventListener("click", calculateResult)
-
-        function calculateResult(){
-            // find highest score: 
-            let highestScore = 0 
-            for(let t of score_span){
-                let v = +t.innerText // <span> 6 </span>
-                if(v>highestScore){
-                  highestScore = v
-                }
-            }
-            // console.log(highestScore)
-            let highestScoreNames = []
-            for(let i = 0; i<=score_span.length-1; i++){
-                 if(highestScore == score_span[i].innerText){ // 2
-                    highestScoreNames.push(playerNamesInput[i].value)
-                 }
-            }
-
-
-            resultDiv.innerText = `Winner are ${highestScoreNames.join(" , ")}`
-            
-        }
-
-
-
-
-
-
-
-
+      // function leaving(){
+      //     btn.innerText = 0
+      // }
     </script>
-</body>
+  </body>
 </html>
