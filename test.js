@@ -210,6 +210,10 @@
 //   (String.fromCharCode(65 + 3)),
 // ];
 
+
+
+
+
 // console.log(arr.join(''))
 
 // let codes = [7,4,11,11,14,22,14,17,11,3]
@@ -261,7 +265,7 @@
 //   let result = 0;
 //   for (let j = 0; j < arr[i].length; j++) {
 //     result +=arr[i][j];
-    
+
 // }
 // console.log(result);
 // }
@@ -281,7 +285,6 @@
 
 //   console.log(result);
 // }
-
 
 // let rows = arr.length
 // let col = arr[0].length
@@ -339,7 +342,6 @@
 // }
 // console.log(mapa)
 
-
 // let arr = [
 //   { name: "Ramesh", age: 18 },
 //   { name: "Mohan",  age: 16 },
@@ -354,21 +356,20 @@
 // })
 // console.log(x)
 
-
-let countries = [
-  "India",
-  "United States",
-  "Canada",
-  "United Kingdom",
-  "Australia",
-  "Germany",
-  "France",
-  "Japan",
-  "China",
-  "Brazil",
-  "South Africa",
-  "Italy"
-];
+// let countries = [
+//   "India",
+//   "United States",
+//   "Canada",
+//   "United Kingdom",
+//   "Australia",
+//   "Germany",
+//   "France",
+//   "Japan",
+//   "China",
+//   "Brazil",
+//   "South Africa",
+//   "Italy",
+// ];
 
 // for(let i=0; i<countries.length; i++){
 //     if(countries[i].includes('a') && countries[i].includes('i')){
@@ -376,9 +377,377 @@ let countries = [
 //     }
 // }
 
-let x = countries.filter((value) => {
-     if(value.includes('a') && value.includes('i')){
-     return value
- }
-})
-console.log(x)
+// let x = countries.filter((value) => {
+//      if(value.includes('a') && value.includes('i')){
+//      return value
+//  }
+// })
+// console.log(x)
+// let n =5
+
+// let i = 0
+// let sum = 0
+// while(sum <= n) { // n is input
+//     i++
+//     sum = sum + i
+//     console.log(sum)
+// }
+
+// let arr = [1, 2, 3, 4, 5,6]
+
+// function findalldetails(abc){
+//   let oddOnly = abc.filter((value) => {
+//       if(value % 2 != 0){
+//         return value
+//       }
+//     })
+//     let sqr = oddOnly.map((value) => {
+//       if(oddOnly.length > 0){
+//         return value*value
+//       }
+//       })
+//     let sums = sqr.reduce((sum,value)=>{
+//        if(sqr.length > 0){
+//        return sum+value,0
+//        }
+//       })
+//       return{
+//         oddOnly,sqr,sums
+//       }
+//     }
+//     console.log(findalldetails(arr))
+
+// let odd = abc.filter((value) => {
+//   return value%2 != 0
+// })
+// let sqr = odd.map((value) => {
+//   return value*value
+// })
+// let sum =sqr.reduce((sum, value) => sum+value,0)
+
+// return{
+//   odd,sqr,sum
+// }
+
+// findalldetails(arr)
+
+// let oddOnly, sqr, sum;
+
+// function findalldetails(arr) {
+//   oddOnly = arr.filter(v => v % 2 !== 0);
+//   sqr = oddOnly.map(v => v * v);
+//   sum = sqr.reduce((s, v) => s + v, 0);
+// }
+
+// findalldetails([1,2,3,4,5,6]);
+
+// console.log(oddOnly); // [1,3,5]
+// console.log(sqr);     // [1,9,25]
+// console.log(sum);     // 35
+
+// function prime(n, i = 1, count = 0) {
+//   if (n < i) {
+//     return count == 2 ? 'prime' : 'not prime';  
+//   }
+//   if (n % i == 0) {
+//     count++;
+//   }
+//  return prime(n, i + 1 , count);
+// }
+// console.log(prime(7));
+
+
+// 
+
+
+// let fruits = ['apple', 'apple', 'banana', 'orange', 'apple', 'banana', 'apple']
+
+// function countFruits(a){
+// return a.reduce((count,value) => {
+// if(value == 'apple'){
+//   count++
+// }
+// return count
+// },0)
+// }
+
+// console.log(countFruits(fruits))
+
+
+// function prime(n,i=1,count=0){
+// if(n<i){
+//   return count == 2 ? 'prime' : 'not prime'
+// }
+// if(n%i==0){
+//   count++
+// }
+// return prime(n,i+1,count)
+// }
+
+// console.log(prime(8))
+
+
+// function test(n) {
+//   if (n === 0) {
+//    return (('done'))
+    
+//   }
+//  return test(n - 1)
+// }
+
+// console.log(test(3))
+
+
+// let arr = [
+//   {id:1, name:"Rahul", city:"Delhi"},
+//   {id:2, name:"Amit", city:"Mumbai"},
+//   {id:3, name:"Suresh", city:"Chennai"},
+//   {id:4, name:"Ramesh", city:"Delhi"},
+//   {id:5, name:"Vikram", city:"Mumbai"},
+//   {id:6, name:"Rajesh", city:"Kolkata"},
+//   {id:7, name:"Mahesh", city:"Chennai"},
+//   {id:8, name:"Sanjay", city:"Delhi"},
+//   {id:9, name:"Vijay", city:"Kolkata"},
+//   {id:10, name:"Ajay", city:"Mumbai"},
+// ]
+
+// let brr = []
+// let ccc = arr.filter((value) => {
+//   if(value.city == 'Delhi'){
+//     brr.push(value.name)
+//   }
+// })
+// console.log(brr)
+
+
+// const name = 'radhy'
+
+// let b = "heyy"
+
+// const user = {
+//   name: "Rahul",
+//   gt:function show() {
+//     ()=>{
+//       console.log(this.name);
+//     }
+//   },
+//   b
+// }
+
+// console.log(user.show);
+
+// // user.show();
+
+
+// const user = {
+//   name: "Rahul",
+//     gt : ()=>{
+//       console.log(this.name);
+//     }
+//   }
+//  user.gt();
+
+// let user1  ={
+//   name :'ramesh'
+// }
+
+// const user = {
+//   name: "Rahul",
+//   show: function () {
+//     console.log(this.name);
+//   }
+// }
+// let user2 = user
+// user2.show();
+
+// const user = {
+//   name: "Rahul",
+//   show: () => {
+//     console.log(this.name);
+//   }
+// }
+
+// user.show();
+
+
+// // restaurent k pass bnda aaya -- food order kia -- wait kia -- food bn gya  -- malik ne aawaz lgai aapka food ready hai aajao le jao -- wo le gya -- function khtm 
+
+// function restaurent(){
+//   console.log('welcome SIR ')
+//   foodOrder(foodReady)
+// }
+
+// function foodOrder(callback){
+// setTimeout(()=>{console.log('food order kia gya')
+// callback()
+// },2000)
+// }
+
+// function foodReady(){
+// setTimeout(()=>{console.log('food ban gya bhai')},3000)
+// }
+
+// restaurent()
+
+
+// function restaurent(){
+//   console.log('welcome SIR ')
+//   foodOrder(foodReady)
+// }
+
+// function foodOrder(callback){
+//   setTimeout(()=>{
+//     console.log('food order kia gya')
+//     callback()
+//   },2000)
+// }
+
+// function foodReady(){
+//   setTimeout(()=>{
+//     console.log('food ban gya bhai')
+//   },3000)
+// }
+
+// restaurent()
+
+// {
+//   let b = 20
+//   {
+//     let a = 10
+//   }
+//   console.log(a)
+// }
+
+// console.log(this);
+// // console.log(window);
+// function test(){
+//   console.log(this);
+// }
+
+// test();
+
+// let user = {
+//   name: "Rahul",
+//   greet: function(){
+//     console.log(this.name);
+//   }
+// }
+
+// let x = user.greet;
+// x();
+
+ 
+ 
+//  let n  = 5
+ 
+//  for(let i = 1; i<=n; i++){
+//   let store = ''
+// for(let j=1; j<=n-i; j++){
+//   store += ' '
+// }
+// for(let k=n; k>=i; k--){
+//   store += k
+// }
+// console.log(store)
+//  }
+
+// let n = 5
+
+// for(let i= 1; i<=n; i++){
+//   let store = ''
+//   for(let j=1; j<=n-i; j++){
+//     store += ' '
+//   }
+//   for(let k=n; k>=1; k--){
+//     store += k
+//   }
+//   console.log(store)
+// }
+
+
+
+//    5
+//   54
+//  543
+// 5432
+//54321
+
+// 5 to 1 line 
+// space 1 to 5-i 
+// value 5 to i-1
+
+
+// let n=5
+// for(let i=n; i>=i; i--){
+// let store = ''
+// for(let j=1; j<=n-i; j++){
+//   store += ' '
+// }
+// for(let k=n; k>=i; k--){
+//   store += k
+// }
+// console.log(store)
+// // }
+// let n=5
+// for(let i=n; i>=1; i--){
+// let store = ''
+// for(let j=1; j<=n-1; j++){
+//   store += ' '
+// }
+// for(let k=n; k>=i-1; k--){
+//   store += k
+// }
+// console.log(store)
+// }
+
+// let n = 5
+// for(let i=1; i<=n; i++){
+//   let store = ''
+//   for(let j=1; j<=n-i; j++){
+//     store += ' '
+//   }
+//   for(let k=n; k>n-i; k--){
+//     store += k
+//   }
+//   console.log(store)
+// }
+
+// *      *
+// **    **
+// ***  ***
+// ********
+// ********
+// ***  ***
+// **    **
+// *      *
+
+let n = 8
+for(let i=1; i<=n/2; i++){
+  let str = ''
+  for(let l=1; l<=i; l++){
+    str += '*'
+  }
+  for(let j=1; j<= n - (i*2); j++){
+    str += ' '
+  }
+  for(let k=1; k<=i; k++){
+    str += '*'
+  }
+  console.log(str)
+}
+for(let i = 1; i<= n/2; i++){
+  let str = ''
+  for(let j=1; j<=(n/2)-i+1; j++){
+    str += '*'
+  }
+  for(let k=1; k<=2*(i-1); k++){
+    str += ' '
+  }
+  for(let l=1; l<=(n/2)-i+1; l++){
+    str += '*'
+  }
+  console.log(str)
+}
+
+
+
