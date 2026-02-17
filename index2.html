@@ -1,98 +1,68 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+    <style>
+      #container {
+        height: 100vh;
+        width: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .circle {
+        border: 2px solid black;
+        height: 50px;
+        width: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        background-color: black;
+        border-color: tomato;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <button id="prev">previous</button>
+      <div class="circle active" id="circle-1">circle1</div>
+      <div class="circle" id="circle-2">circle2</div>
+      <div class="circle" id="circle-3">circle3</div>
+      <div class="circle" id="circle-4">circle4</div>
+      <div class="circle" id="circle-5">circle5</div>
+      <button id="next">next</button>
+    </div>
 
-    <div class="app">
-  <section class="layout">
-    <aside class="sidebar">
-      <div class="menu">
-        <div class="item">
-          <span class="badge">7</span>
-        </div>
-      </div>
-    </aside>
+    <script>
+      let circles = document.querySelectorAll(".circle");
+      let nextBtn = document.getElementById("next");
+      let prevBtn = document.getElementById("prev");
+      let currentStep = 1;
 
-    <main class="content">
-      <article class="card">
-        <div class="card-body">
-          <button class="btn">
-            <span class="btn-text">
-              Click
-              <i class="icon">★</i>
-            </span>
-          </button>
-        </div>
-      </article>
-    </main>
-  </section>
-</div>
+      nextBtn.addEventListener("click", (e) => {
+        if (currentStep < circles.length) {
+          currentStep++
+         circles.forEach((value,index) => {
+          if(index < currentStep){
+            value.classList.add('active')
+          }else{
+            value.classList.remove('active')
+          }
+         })
+        }
+      });
 
-
-<style>
-    html {
-  font-size: 16px;
-}
-
-/* ROOT LEVEL */
-.app {
-  font-size: 150%; 
-}
-
-/* LAYOUT */
-.layout {
-  font-size: 1rem;
-}
-
-/* SIDEBAR CHAIN */
-.sidebar {
-  font-size: 20px;
-}
-
-.menu {
-  font-size: 2em; 40
-}
-
-.item {
-  font-size: 150%; 60
-}
-
-.badge {
-  font-size: inherit; 60
-  padding: 50%; 30
-  border-width: 4px; 4
-}
-
-/* CONTENT CHAIN */
-.content {
-  font-size: 1.25rem;
-}
-
-.card {
-  font-size: 2em;
-}
-
-.card-body {
-  font-size: inherit;
-}
-
-.btn {
-  font-size: 1.5em; 
-  padding: 1em;
-}
-
-.btn-text {
-  font-size: unset;
-}
-
-.icon {
-  font-size: initial; 16
-}
-
-</style>
-</body>
+      prevBtn.addEventListener('click', ()=>{
+        if(currentStep > circles.length){
+          currentStep--
+        }
+      })
+    </script>
+  </body>
 </html>

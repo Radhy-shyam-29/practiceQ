@@ -21,7 +21,7 @@
         }, 100);
       }
     </script> -->
-
+<!-- 
     <h1>radhy</h1>
     <button>caste</button>
     <script>
@@ -33,6 +33,37 @@ btn.addEventListener('click', changeToCaste)
 function changeToCaste(){
   heading.innerText = 'bairagi'
 }
+    </script> -->
+
+
+    <button>head</button>
+    <button>tail</button>
+    <p class="score">0</p>
+    <p class="score">0</p>
+
+    <script>
+let btns   = document.querySelectorAll('button')
+let Result = document.querySelectorAll('.score')
+
+for(let t of btns){
+  t.addEventListener('click', toss)
+}
+
+  function toss(e){
+    let eventValue = e.target.innerText
+
+  let arr = ['head', 'tail']
+  let randomIndex = Math.floor(Math.random()*arr.length)
+  let arrindex = arr[randomIndex]
+
+  if(arrindex.toLowerCase() == eventValue.toLowerCase()){
+    Result[0].innerText = +Result[0].innerText +1
+  }
+  else{
+    Result[1].innerText = +Result[1].innerText +1
+  }
+  }
+
     </script>
   </body>
 </html>

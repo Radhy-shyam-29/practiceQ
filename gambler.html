@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form action="#">
+    <input type="text" name="" id="input" placeholder="enter task">
+    <button>Click to add</button>
+  </form>
+  <ol>
+
+  </ol>
+
+  <script>
+    let taskget = localStorage.getItem('task')
+    // if(taskget){
+    //   arr = JSON.parse(taskget)
+    // }
+    // for(let t of taskget){
+    //   let li = document.createElement('li')
+    // li.innerText = t
+    // ol.append(li)
+    // }
+    let form = document.querySelector('form')
+    let input = document.querySelector('input')
+    let btn = document.querySelector('button')
+    let ol = document.querySelector('ol')
+    let arr = []
+
+    form.addEventListener('submit', coderun)
+
+   function coderun(e){
+    e.preventDefault() 
+    let value = input.value
+    let li = document.createElement('li')
+    li.innerText = value
+    ol.append(li)
+    arr.push(value)
+    input.value = ''
+    localStorage.setItem('task', JSON.stringify(arr))
+    }
+    
+  </script>
+</body>
+</html>

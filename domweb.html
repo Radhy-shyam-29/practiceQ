@@ -1,0 +1,1891 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOM Sikho – Pura Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141726;
+    --surface2: #1c2035;
+    --border: #2a2f4a;
+    --accent: #ff6b35;
+    --accent2: #4ecdc4;
+    --accent3: #ffe66d;
+    --accent4: #a29bfe;
+    --text: #e8eaf0;
+    --muted: #8890b0;
+    --code-bg: #0a0c14;
+    --green: #00d68f;
+    --red: #ff4d6d;
+    --radius: 14px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+  /* HEADER */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a0a2e 50%, #0d1a2e 100%);
+    padding: 60px 20px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,107,53,0.15) 0%, transparent 70%);
+    top: -200px; left: 50%; transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,107,53,0.15);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 4px 16px;
+    border-radius: 30px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,107,53,0.3); }
+    50% { box-shadow: 0 0 0 8px rgba(255,107,53,0); }
+  }
+
+  .hero h1 {
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 span.orange { color: var(--accent); }
+  .hero h1 span.teal { color: var(--accent2); }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 520px;
+    margin: 0 auto 30px;
+  }
+
+  .progress-bar-outer {
+    max-width: 400px;
+    margin: 0 auto;
+    background: var(--border);
+    border-radius: 30px;
+    height: 8px;
+    overflow: hidden;
+  }
+
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 30px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .progress-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,15,26,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    flex-shrink: 0;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* MAIN */
+  .main { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* SECTION */
+  .section {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin: 30px 0 24px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--accent);
+  }
+
+  .section-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .section-header h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  .section-header p {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  /* CONCEPT CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tag-easy { background: rgba(0,214,143,0.15); color: var(--green); }
+  .tag-medium { background: rgba(255,230,109,0.15); color: var(--accent3); }
+  .tag-hard { background: rgba(255,77,109,0.15); color: var(--red); }
+  .tag-tip { background: rgba(162,155,254,0.15); color: var(--accent4); }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: 'Fira Code', monospace;
+    font-size: 13.5px;
+    line-height: 1.8;
+    overflow-x: auto;
+    margin: 12px 0;
+    position: relative;
+  }
+
+  .code-block .comment { color: #4a5280; }
+  .code-block .keyword { color: var(--accent2); }
+  .code-block .string { color: var(--accent3); }
+  .code-block .method { color: var(--accent); }
+  .code-block .var { color: var(--accent4); }
+  .code-block .num { color: var(--green); }
+
+  .copy-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: var(--border);
+    border: none;
+    color: var(--muted);
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: 'Baloo 2', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover { background: var(--accent); color: white; }
+
+  /* VISUAL TREE */
+  .tree {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    line-height: 2;
+  }
+
+  .tree-node {
+    cursor: pointer;
+    transition: color 0.2s;
+    display: block;
+  }
+
+  .tree-node:hover { color: var(--accent); }
+  .tree-node.html-tag { color: var(--accent2); }
+  .tree-node.text-node { color: var(--accent3); }
+  .tree-node.attr { color: var(--accent4); }
+
+  /* INTERACTIVE DEMO */
+  .demo-box {
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin: 16px 0;
+  }
+
+  .demo-box h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin: 4px;
+  }
+
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: #ff8555; transform: translateY(-1px); }
+  .btn-secondary { background: var(--accent2); color: #0d0f1a; }
+  .btn-secondary:hover { background: #6ee0d8; transform: translateY(-1px); }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-danger { background: var(--red); color: white; }
+
+  .input-field {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 14px;
+    margin-bottom: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-field:focus { border-color: var(--accent2); }
+
+  .output-box {
+    min-height: 40px;
+    background: var(--code-bg);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--accent3);
+    font-family: 'Fira Code', monospace;
+    margin-top: 10px;
+    border: 1px solid var(--border);
+  }
+
+  /* SELECTORS TABLE */
+  .table-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 12px 0;
+  }
+
+  th {
+    background: var(--surface2);
+    color: var(--accent2);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+  }
+
+  tr:hover td { background: var(--surface2); }
+
+  td:last-child { font-family: 'Baloo 2', sans-serif; color: var(--muted); }
+
+  /* QUIZ */
+  .quiz-q {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .quiz-q h4 { margin-bottom: 14px; font-size: 1rem; }
+
+  .quiz-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 16px;
+    margin-bottom: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .quiz-option:hover { border-color: var(--accent2); color: var(--accent2); }
+  .quiz-option.correct { background: rgba(0,214,143,0.15); border-color: var(--green); color: var(--green); }
+  .quiz-option.wrong { background: rgba(255,77,109,0.15); border-color: var(--red); color: var(--red); }
+
+  .quiz-feedback {
+    margin-top: 10px;
+    font-size: 14px;
+    min-height: 20px;
+    font-weight: 600;
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-size: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .highlight-info { background: rgba(78,205,196,0.1); border-left: 3px solid var(--accent2); }
+  .highlight-warn { background: rgba(255,230,109,0.1); border-left: 3px solid var(--accent3); }
+  .highlight-tip { background: rgba(162,155,254,0.1); border-left: 3px solid var(--accent4); }
+
+  .highlight-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+  /* EVENT VISUALIZER */
+  .event-box {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0;
+    transition: all 0.3s;
+    cursor: pointer;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .event-box:hover { border-color: var(--accent); background: rgba(255,107,53,0.05); }
+
+  /* DOM LIVE EDITOR */
+  .live-editor {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 12px 0;
+  }
+
+  @media (max-width: 600px) { .live-editor { grid-template-columns: 1fr; } }
+
+  .editor-pane {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .editor-pane-header {
+    background: var(--surface2);
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .editor-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 14px;
+    background: transparent;
+    border: none;
+    color: var(--accent3);
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    resize: vertical;
+    outline: none;
+  }
+
+  .preview-pane {
+    padding: 14px;
+    min-height: 120px;
+    font-size: 14px;
+  }
+
+  /* CHEATSHEET GRID */
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+
+  .cheat-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'Fira Code', monospace;
+    font-size: 12.5px;
+    line-height: 1.8;
+  }
+
+  .cheat-item .cheat-title {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .cheat-item code { color: var(--accent); }
+  .cheat-item .desc { color: var(--muted); font-size: 11px; font-family: 'Baloo 2', sans-serif; }
+
+  /* FLOATING COUNTER */
+  #live-counter {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 8px 18px;
+    font-size: 13px;
+    color: var(--muted);
+    z-index: 99;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+
+  #live-counter span { color: var(--accent); font-weight: 700; }
+
+  /* STEP INDICATOR */
+  .steps {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .step-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .step.done .step-num { background: var(--green); color: #0d0f1a; }
+  .step.current .step-num { background: var(--accent); color: white; }
+  .step.done { color: var(--text); }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .section-header { flex-direction: column; }
+    .hero h1 { font-size: 2rem; }
+  }
+
+  .separator {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 24px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">⚡ Complete DOM Course</div>
+  <h1><span class="teal">DOM</span> Sikho<br><span class="orange">Basic → Advanced</span></h1>
+  <p>Ek anjaan beginner bhi yahan aake DOM ka master ban jaega. Hindi mein, step-by-step, live demos ke saath.</p>
+  <div class="progress-bar-outer">
+    <div class="progress-bar-inner" id="mainProgress"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">0% Complete</div>
+</div>
+
+<!-- NAV -->
+<div class="nav" id="mainNav">
+  <button class="nav-btn active" onclick="showSection(0, this)">🧩 DOM Kya Hai?</button>
+  <button class="nav-btn" onclick="showSection(1, this)">🌳 DOM Tree</button>
+  <button class="nav-btn" onclick="showSection(2, this)">🔍 Selectors</button>
+  <button class="nav-btn" onclick="showSection(3, this)">✏️ Badlaav</button>
+  <button class="nav-btn" onclick="showSection(4, this)">⚡ Events</button>
+  <button class="nav-btn" onclick="showSection(5, this)">➕ Create/Delete</button>
+  <button class="nav-btn" onclick="showSection(6, this)">🎨 CSS Control</button>
+  <button class="nav-btn" onclick="showSection(7, this)">🔄 Traversal</button>
+  <button class="nav-btn" onclick="showSection(8, this)">🚀 Advanced</button>
+  <button class="nav-btn" onclick="showSection(9, this)">📋 Cheatsheet</button>
+  <button class="nav-btn" onclick="showSection(10, this)">🧠 Quiz</button>
+</div>
+
+<div class="main">
+
+  <!-- ===== SECTION 0: DOM KYA HAI ===== -->
+  <div class="section active" id="sec-0">
+    <div class="section-header">
+      <div class="section-icon">🧩</div>
+      <div>
+        <h2>DOM Kya Hota Hai?</h2>
+        <p>Bilkul basics se samajhte hain — zero se</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🤔 Ek Simple Example Se Samjho</h3>
+      <p>Maan lo ek website ek <strong>ghar</strong> hai. HTML uski deewarein, chhat, darwaze hain. Lekin agar kuch badalna ho — roshni on karo, darwaza kholo — toh aapko ek <strong>remote control</strong> chahiye hoga.</p>
+      <br>
+      <p><strong>DOM wahi remote control hai!</strong></p>
+      <div class="highlight highlight-info">
+        <span class="highlight-icon">💡</span>
+        <div><strong>DOM = Document Object Model</strong><br>
+        Browser HTML file padh ke usse ek <em>JavaScript object</em> mein badal deta hai. Hum JS se us object ko change kar sakte hain — aur webpage instantly update ho jaata hai!</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🧠 Kaise Kaam Karta Hai? <span class="tag tag-easy">Basic</span></h3>
+      <div class="steps">
+        <div class="step done"><div class="step-num">1</div> HTML likho</div>
+        <div class="step done"><div class="step-num">2</div> Browser padhta hai</div>
+        <div class="step done"><div class="step-num">3</div> DOM tree banata hai</div>
+        <div class="step done"><div class="step-num">4</div> JS se control karo</div>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// Aapka HTML kuch aisa hoga:</span>
+<span class="keyword">&lt;h1</span> <span class="attr">id=</span><span class="string">"heading"</span><span class="keyword">&gt;</span>Namaste!<span class="keyword">&lt;/h1&gt;</span>
+
+<span class="comment">// JavaScript DOM use karke badal sakta hai:</span>
+<span class="var">document</span>.<span class="method">getElementById</span>(<span class="string">"heading"</span>).textContent = <span class="string">"Hello World!"</span>;
+<span class="comment">// Bas! Heading change ho gayi!</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎮 Live Demo — DOM Ko Khud Touch Karo!</h3>
+      <div class="demo-box">
+        <h4>🔬 Experiment</h4>
+        <div id="demo-element" style="font-size:20px; font-weight:700; padding:16px; background:var(--surface2); border-radius:8px; text-align:center; margin-bottom:14px; color: var(--accent2);">
+          Main DOM ka element hoon! 👋
+        </div>
+        <button class="btn btn-primary" onclick="changeText()">📝 Text Badlo</button>
+        <button class="btn btn-secondary" onclick="changeColor()">🎨 Color Badlo</button>
+        <button class="btn btn-outline" onclick="resetDemo()">🔄 Reset</button>
+        <div class="output-box" id="demo-output">→ Koi bhi button dabao aur dekho kya hota hai...</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📌 DOM Ke 3 Kaam <span class="tag tag-tip">Important</span></h3>
+      <p>DOM se ye 3 kaam hote hain:</p>
+      <br>
+      <p>1️⃣ <strong>Padhna (Read)</strong> — Kisi element ka content ya style dekhna</p>
+      <p>2️⃣ <strong>Badalna (Write)</strong> — Text, style, attribute change karna</p>
+      <p>3️⃣ <strong>Sunna (Events)</strong> — Click, hover, keyboard pe react karna</p>
+    </div>
+
+    <button class="btn btn-primary" onclick="showSection(1, document.querySelectorAll('.nav-btn')[1])">Aage Badho → DOM Tree 🌳</button>
+  </div>
+
+  <!-- ===== SECTION 1: DOM TREE ===== -->
+  <div class="section" id="sec-1">
+    <div class="section-header">
+      <div class="section-icon">🌳</div>
+      <div>
+        <h2>DOM Tree</h2>
+        <p>HTML ek family tree ki tarah hota hai — Node samjho</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🌿 HTML Se DOM Tree Kaise Banta Hai?</h3>
+      <p>Ye HTML:</p>
+      <div class="code-block">
+<span class="keyword">&lt;html&gt;</span>
+  <span class="keyword">&lt;head&gt;</span>
+    <span class="keyword">&lt;title&gt;</span>Meri Site<span class="keyword">&lt;/title&gt;</span>
+  <span class="keyword">&lt;/head&gt;</span>
+  <span class="keyword">&lt;body&gt;</span>
+    <span class="keyword">&lt;h1&gt;</span>Heading<span class="keyword">&lt;/h1&gt;</span>
+    <span class="keyword">&lt;p&gt;</span>Paragraph<span class="keyword">&lt;/p&gt;</span>
+  <span class="keyword">&lt;/body&gt;</span>
+<span class="keyword">&lt;/html&gt;</span>
+      </div>
+      <p style="margin-bottom:12px;">Aise tree mein banta hai:</p>
+      <div class="tree" id="domTree">
+<span class="tree-node html-tag">📄 document</span>
+<span class="tree-node html-tag">└── 🔖 &lt;html&gt;</span>
+<span class="tree-node html-tag">    ├── 🔖 &lt;head&gt;</span>
+<span class="tree-node text-node">    │   └── 🔖 &lt;title&gt; → "Meri Site"</span>
+<span class="tree-node html-tag">    └── 🔖 &lt;body&gt;</span>
+<span class="tree-node html-tag">        ├── 🔖 &lt;h1&gt; → "Heading"</span>
+<span class="tree-node html-tag">        └── 🔖 &lt;p&gt;  → "Paragraph"</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🧬 Node Types — 4 Prakar Ke Nodes <span class="tag tag-medium">Medium</span></h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Type</th><th>Example</th><th>Matlab</th></tr>
+          <tr><td><code style="color:var(--accent2)">Element Node</code></td><td>&lt;div&gt;, &lt;p&gt;, &lt;h1&gt;</td><td>HTML tag</td></tr>
+          <tr><td><code style="color:var(--accent3)">Text Node</code></td><td>"Hello World"</td><td>Andar ka text</td></tr>
+          <tr><td><code style="color:var(--accent4)">Attribute Node</code></td><td>id="box", class="red"</td><td>Tag ke attributes</td></tr>
+          <tr><td><code style="color:var(--green)">Document Node</code></td><td>document</code></td><td>Poora page</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🌱 Parent, Child, Sibling — Family Relations</h3>
+      <div class="code-block">
+<span class="keyword">&lt;ul&gt;</span>           <span class="comment">&lt;-- PARENT (Maa Baap)</span>
+  <span class="keyword">&lt;li&gt;</span>Item 1<span class="keyword">&lt;/li&gt;</span>  <span class="comment">&lt;-- CHILD (Pehla Baccha)</span>
+  <span class="keyword">&lt;li&gt;</span>Item 2<span class="keyword">&lt;/li&gt;</span>  <span class="comment">&lt;-- CHILD + SIBLING (Doosra Baccha)</span>
+  <span class="keyword">&lt;li&gt;</span>Item 3<span class="keyword">&lt;/li&gt;</span>  <span class="comment">&lt;-- CHILD + SIBLING (Teesra Baccha)</span>
+<span class="keyword">&lt;/ul&gt;</span>
+      </div>
+      <div class="highlight highlight-tip">
+        <span class="highlight-icon">💜</span>
+        <div>Ye relationships DOM traversal mein kaam aati hain — baad mein seekhenge!</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🔍 Tree Ko Explore Karo — Live!</h3>
+      <div class="demo-box">
+        <h4>🧪 Dom Inspector</h4>
+        <div id="tree-demo-el" style="border:2px solid var(--border); border-radius:8px; padding:16px;">
+          <h3 id="tree-h3" style="color:var(--accent2);">Heading Node</h3>
+          <p id="tree-p1">Pehla paragraph</p>
+          <p id="tree-p2">Doosra paragraph</p>
+        </div>
+        <br>
+        <button class="btn btn-primary" onclick="inspectNode('tree-h3')">h3 Node Dekho</button>
+        <button class="btn btn-secondary" onclick="inspectNode('tree-p1')">p1 Node Dekho</button>
+        <button class="btn btn-outline" onclick="inspectNode('tree-p2')">p2 Node Dekho</button>
+        <div class="output-box" id="tree-output">→ Kisi node pe click karo...</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="showSection(2, document.querySelectorAll('.nav-btn')[2])">Aage Badho → Selectors 🔍</button>
+  </div>
+
+  <!-- ===== SECTION 2: SELECTORS ===== -->
+  <div class="section" id="sec-2">
+    <div class="section-header">
+      <div class="section-icon">🔍</div>
+      <div>
+        <h2>DOM Selectors</h2>
+        <p>Elements dhundho — ye sabse zaroori skill hai</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📌 5 Tarike Element Dhundne Ke <span class="tag tag-easy">Must Know</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// 1. ID se dhundo (sirf EK element milega)</span>
+<span class="var">document</span>.<span class="method">getElementById</span>(<span class="string">"myId"</span>)
+
+<span class="comment">// 2. Class se dhundo (SAARE milenge)</span>
+<span class="var">document</span>.<span class="method">getElementsByClassName</span>(<span class="string">"myClass"</span>)
+
+<span class="comment">// 3. Tag se dhundo (saare h1, p, div etc)</span>
+<span class="var">document</span>.<span class="method">getElementsByTagName</span>(<span class="string">"p"</span>)
+
+<span class="comment">// 4. CSS Selector se (BEST method - ek element)</span>
+<span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"#id"</span> / <span class="string">".class"</span> / <span class="string">"tag"</span>)
+
+<span class="comment">// 5. CSS Selector se (saare elements)</span>
+<span class="var">document</span>.<span class="method">querySelectorAll</span>(<span class="string">".cards"</span>)
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>⚡ querySelector vs getElementById — Kaun Better? <span class="tag tag-tip">Pro Tip</span></h3>
+      <div class="highlight highlight-warn">
+        <span class="highlight-icon">⚠️</span>
+        <div>Modern coding mein <code style="color:var(--accent)">querySelector</code> aur <code style="color:var(--accent)">querySelectorAll</code> zyada use hote hain kyunki ye koi bhi CSS selector accept karte hain!</div>
+      </div>
+      <div class="code-block">
+<span class="comment">// Ye sab querySelector se ho sakta hai:</span>
+<span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"#myId"</span>)        <span class="comment">// ID</span>
+<span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">".myClass"</span>)     <span class="comment">// Class</span>
+<span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"h1"</span>)           <span class="comment">// Tag</span>
+<span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"div.card p"</span>)   <span class="comment">// Nested selector!</span>
+<span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"[data-id='5']"</span>) <span class="comment">// Attribute</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎮 Live Selector Demo</h3>
+      <div class="demo-box">
+        <h4>🧪 Selectors Try Karo</h4>
+        <div style="margin-bottom:14px;">
+          <span id="sel-1" class="demo-text" style="display:inline-block; padding:8px 16px; background:var(--surface); border-radius:6px; margin:4px;">Box #1</span>
+          <span id="sel-2" class="demo-text" style="display:inline-block; padding:8px 16px; background:var(--surface); border-radius:6px; margin:4px;">Box #2</span>
+          <span id="sel-3" class="demo-text" style="display:inline-block; padding:8px 16px; background:var(--surface); border-radius:6px; margin:4px;">Box #3</span>
+        </div>
+        <button class="btn btn-primary" onclick="selDemo('getElementById', 'sel-2')">getElementById("sel-2")</button>
+        <button class="btn btn-secondary" onclick="selDemo('querySelectorAll', '.demo-text')">querySelectorAll(".demo-text")</button>
+        <button class="btn btn-outline" onclick="resetSel()">Reset</button>
+        <div class="output-box" id="sel-output">→ Button dabao aur dekho kaun select hua...</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="showSection(3, document.querySelectorAll('.nav-btn')[3])">Aage Badho → Badlaav ✏️</button>
+  </div>
+
+  <!-- ===== SECTION 3: CONTENT CHANGE ===== -->
+  <div class="section" id="sec-3">
+    <div class="section-header">
+      <div class="section-icon">✏️</div>
+      <div>
+        <h2>Content Badalna</h2>
+        <p>Text, HTML, aur attributes ko read karo aur change karo</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📝 textContent vs innerHTML vs innerText <span class="tag tag-medium">Important Diff</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="var">let</span> el = <span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"#box"</span>);
+
+<span class="comment">// textContent — sirf plain text</span>
+el.textContent = <span class="string">"Hello Duniya!"</span>;
+
+<span class="comment">// innerHTML — HTML bhi likh sakte ho</span>
+el.innerHTML = <span class="string">"&lt;strong&gt;Bold Text&lt;/strong&gt;"</span>;
+
+<span class="comment">// innerText — jo dikhta hai wohi (CSS consider karta hai)</span>
+el.innerText = <span class="string">"Ye visible hai"</span>;
+      </div>
+      <div class="highlight highlight-warn">
+        <span class="highlight-icon">⚠️</span>
+        <div><strong>innerHTML</strong> use karte waqt user input kabhi direct mat daalo — XSS attack ho sakti hai! Sirf apna trusted content daalo.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🏷️ Attributes Padhna aur Badalna</h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="var">let</span> img = <span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"img"</span>);
+
+<span class="comment">// Attribute padhna</span>
+img.<span class="method">getAttribute</span>(<span class="string">"src"</span>);     <span class="comment">// "photo.jpg"</span>
+
+<span class="comment">// Attribute set karna</span>
+img.<span class="method">setAttribute</span>(<span class="string">"src"</span>, <span class="string">"new.jpg"</span>);
+img.<span class="method">setAttribute</span>(<span class="string">"alt"</span>, <span class="string">"Nai photo"</span>);
+
+<span class="comment">// Attribute hatana</span>
+img.<span class="method">removeAttribute</span>(<span class="string">"disabled"</span>);
+
+<span class="comment">// Direct bhi kar sakte ho</span>
+img.src = <span class="string">"photo.jpg"</span>;
+img.alt = <span class="string">"Description"</span>;
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎮 Live Content Editor</h3>
+      <div class="demo-box">
+        <h4>🧪 Khud Try Karo</h4>
+        <div id="edit-target" style="padding:16px; background:var(--surface); border-radius:8px; margin-bottom:12px; font-size:18px; font-weight:700; text-align:center; min-height:50px;">Yahan text dikhega!</div>
+        <input class="input-field" id="new-text-input" placeholder="Naya text type karo..." />
+        <button class="btn btn-primary" onclick="changeContent('text')">textContent Se Badlo</button>
+        <button class="btn btn-secondary" onclick="changeContent('html')">innerHTML Se Badlo (&lt;em&gt; tag bhi try karo&lt;/em&gt;)</button>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="showSection(4, document.querySelectorAll('.nav-btn')[4])">Aage Badho → Events ⚡</button>
+  </div>
+
+  <!-- ===== SECTION 4: EVENTS ===== -->
+  <div class="section" id="sec-4">
+    <div class="section-header">
+      <div class="section-icon">⚡</div>
+      <div>
+        <h2>DOM Events</h2>
+        <p>User ke actions pe react karo — click, hover, type, sab kuch!</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎯 addEventListener — Sabse Sahi Tarika <span class="tag tag-easy">Core Skill</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="var">let</span> btn = <span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"#myBtn"</span>);
+
+<span class="comment">// Syntax: element.addEventListener("event", function)</span>
+btn.<span class="method">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span>() {
+  console.<span class="method">log</span>(<span class="string">"Button click hua!"</span>);
+});
+
+<span class="comment">// Arrow function bhi chal sakta hai</span>
+btn.<span class="method">addEventListener</span>(<span class="string">"click"</span>, () =&gt; {
+  console.<span class="method">log</span>(<span class="string">"Click!"</span>);
+});
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📋 Common Events Ka Chart <span class="tag tag-medium">Reference</span></h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Event</th><th>Kab Hota Hai</th></tr>
+          <tr><td><code style="color:var(--accent)">click</code></td><td>Mouse click pe</td></tr>
+          <tr><td><code style="color:var(--accent)">dblclick</code></td><td>Double click pe</td></tr>
+          <tr><td><code style="color:var(--accent)">mouseover</code></td><td>Mouse element pe aaye</td></tr>
+          <tr><td><code style="color:var(--accent)">mouseout</code></td><td>Mouse element se jaaye</td></tr>
+          <tr><td><code style="color:var(--accent)">keydown</code></td><td>Key press ho</td></tr>
+          <tr><td><code style="color:var(--accent)">keyup</code></td><td>Key release ho</td></tr>
+          <tr><td><code style="color:var(--accent)">input</code></td><td>Input field mein kuch likho</td></tr>
+          <tr><td><code style="color:var(--accent)">submit</code></td><td>Form submit ho</td></tr>
+          <tr><td><code style="color:var(--accent)">load</code></td><td>Page load ho</td></tr>
+          <tr><td><code style="color:var(--accent)">scroll</code></td><td>Page scroll ho</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🔮 Event Object — Bahut Important! <span class="tag tag-medium">Must Know</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// Event handler ko "e" ya "event" milta hai</span>
+btn.<span class="method">addEventListener</span>(<span class="string">"click"</span>, (<span class="var">e</span>) =&gt; {
+  console.<span class="method">log</span>(e.target);       <span class="comment">// Kaun sa element click hua</span>
+  console.<span class="method">log</span>(e.type);         <span class="comment">// "click"</span>
+  console.<span class="method">log</span>(e.clientX);      <span class="comment">// X position</span>
+  console.<span class="method">log</span>(e.clientY);      <span class="comment">// Y position</span>
+  e.<span class="method">preventDefault</span>();          <span class="comment">// Default action rok do</span>
+  e.<span class="method">stopPropagation</span>();          <span class="comment">// Bubbling rok do</span>
+});
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎮 Events Live Demo — Sab Try Karo!</h3>
+      <div class="demo-box">
+        <h4>🧪 Interactions</h4>
+        <div class="event-box" id="event-box-1" 
+          onmouseover="eventDemo(this,'mouseover')" 
+          onmouseout="eventDemo(this,'mouseout')"
+          onclick="eventDemo(this,'click')"
+          ondblclick="eventDemo(this,'dblclick')">
+          👆 Mujhe Click, Double-Click, Hover karo!
+        </div>
+        <input class="input-field" id="event-input" placeholder="Yahan type karo..." oninput="keyDemo(this)">
+        <div class="output-box" id="event-output">→ Koi bhi event trigger karo...</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🌊 Event Bubbling — Kya Hota Hai? <span class="tag tag-hard">Advanced</span></h3>
+      <div class="highlight highlight-info">
+        <span class="highlight-icon">🫧</span>
+        <div><strong>Bubbling:</strong> Jab child element pe click hota hai, toh event uske parent, grandparent — sabko bhi milta hai! Jaise paani mein bubble upar uthta hai.</div>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// DOM structure:</span>
+<span class="comment">// div.outer &gt; div.inner &gt; button</span>
+
+<span class="comment">// Button click karne pe teeno mein event jaayega!</span>
+<span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"button"</span>).<span class="method">addEventListener</span>(<span class="string">"click"</span>, (e) =&gt; {
+  e.<span class="method">stopPropagation</span>(); <span class="comment">// Parent tak mat jaao</span>
+});
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="showSection(5, document.querySelectorAll('.nav-btn')[5])">Aage Badho → Create/Delete ➕</button>
+  </div>
+
+  <!-- ===== SECTION 5: CREATE/DELETE ===== -->
+  <div class="section" id="sec-5">
+    <div class="section-header">
+      <div class="section-icon">➕</div>
+      <div>
+        <h2>Elements Banana aur Hatana</h2>
+        <p>DOM mein naye nodes add karo, hatao — dynamically!</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🏗️ Naya Element Banana <span class="tag tag-medium">Core</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// Step 1: Naya element banao</span>
+<span class="var">let</span> newDiv = <span class="var">document</span>.<span class="method">createElement</span>(<span class="string">"div"</span>);
+
+<span class="comment">// Step 2: Content daalo</span>
+newDiv.textContent = <span class="string">"Main naya hoon!"</span>;
+newDiv.className = <span class="string">"my-box"</span>;
+
+<span class="comment">// Step 3: Parent mein daal do</span>
+<span class="var">document</span>.<span class="method">getElementById</span>(<span class="string">"container"</span>).<span class="method">appendChild</span>(newDiv);
+
+<span class="comment">// Alag jagah daal sakte ho:</span>
+parent.<span class="method">prepend</span>(newDiv);        <span class="comment">// Shuru mein</span>
+parent.<span class="method">append</span>(newDiv);         <span class="comment">// Ant mein</span>
+parent.<span class="method">insertBefore</span>(newDiv, ref); <span class="comment">// Kisi ke pehle</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🗑️ Element Hatana</h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="var">let</span> el = <span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"#old-box"</span>);
+
+<span class="comment">// Modern tarika (seedha hatao)</span>
+el.<span class="method">remove</span>();
+
+<span class="comment">// Parent se hatao (purana tarika)</span>
+el.parentNode.<span class="method">removeChild</span>(el);
+
+<span class="comment">// Saare children hatao</span>
+parent.innerHTML = <span class="string">""</span>;
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎮 Live DOM Builder</h3>
+      <div class="demo-box">
+        <h4>🧪 Khud Elements Banao aur Hatao</h4>
+        <input class="input-field" id="new-item-input" placeholder="Kuch bhi text likhke Add karo...">
+        <button class="btn btn-primary" onclick="addItem()">➕ Add Element</button>
+        <button class="btn btn-danger" onclick="removeLastItem()">🗑️ Last Hatao</button>
+        <button class="btn btn-outline" onclick="clearAll()">🧹 Sab Clear</button>
+        <div id="item-container" style="min-height:60px; margin-top:12px; border:1px dashed var(--border); border-radius:8px; padding:10px; display:flex; gap:8px; flex-wrap:wrap; align-items:flex-start;">
+          <span style="color:var(--muted); font-size:13px;">→ Elements yahan aayenge...</span>
+        </div>
+        <div class="output-box" id="add-output" style="margin-top:10px;">Count: 0 elements</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📋 cloneNode — Copy Banana <span class="tag tag-tip">Pro Tip</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="var">let</span> original = <span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">".card"</span>);
+
+<span class="comment">// Shallow copy (sirf element, children nahi)</span>
+<span class="var">let</span> copy1 = original.<span class="method">cloneNode</span>(<span class="num">false</span>);
+
+<span class="comment">// Deep copy (element + saare children)</span>
+<span class="var">let</span> copy2 = original.<span class="method">cloneNode</span>(<span class="num">true</span>);
+
+parent.<span class="method">appendChild</span>(copy2);
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="showSection(6, document.querySelectorAll('.nav-btn')[6])">Aage Badho → CSS Control 🎨</button>
+  </div>
+
+  <!-- ===== SECTION 6: CSS CONTROL ===== -->
+  <div class="section" id="sec-6">
+    <div class="section-header">
+      <div class="section-icon">🎨</div>
+      <div>
+        <h2>CSS Style Control</h2>
+        <p>JS se styles aur classes manage karo</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎨 Inline Style Dena <span class="tag tag-easy">Easy</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="var">let</span> box = <span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"#box"</span>);
+
+<span class="comment">// Direct style properties</span>
+box.style.color = <span class="string">"red"</span>;
+box.style.backgroundColor = <span class="string">"#ff0"</span>;  <span class="comment">// background-color = camelCase</span>
+box.style.fontSize = <span class="string">"20px"</span>;
+box.style.display = <span class="string">"none"</span>;       <span class="comment">// Chhupao</span>
+box.style.display = <span class="string">"block"</span>;      <span class="comment">// Dikhao</span>
+box.style.transform = <span class="string">"rotate(45deg)"</span>;
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🏷️ classList — Classes Manage Karo <span class="tag tag-medium">Best Practice</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="var">let</span> el = <span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">".card"</span>);
+
+<span class="comment">// Class add karo</span>
+el.classList.<span class="method">add</span>(<span class="string">"active"</span>);
+
+<span class="comment">// Class hatao</span>
+el.classList.<span class="method">remove</span>(<span class="string">"active"</span>);
+
+<span class="comment">// Toggle (hai toh hatao, nahi hai toh add karo)</span>
+el.classList.<span class="method">toggle</span>(<span class="string">"dark-mode"</span>);
+
+<span class="comment">// Check karo class hai ya nahi</span>
+el.classList.<span class="method">contains</span>(<span class="string">"active"</span>); <span class="comment">// true/false</span>
+
+<span class="comment">// Replace karo</span>
+el.classList.<span class="method">replace</span>(<span class="string">"old-class"</span>, <span class="string">"new-class"</span>);
+      </div>
+      <div class="highlight highlight-tip">
+        <span class="highlight-icon">💜</span>
+        <div><strong>Best Practice:</strong> Inline style ki jagah CSS classes use karo. classList.toggle() se dark mode jaise features banao!</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎮 Style Controls — Live Demo</h3>
+      <div class="demo-box">
+        <h4>🧪 CSS Ko JS Se Control Karo</h4>
+        <div id="style-target" style="padding:20px; background:var(--surface); border-radius:10px; text-align:center; font-size:18px; font-weight:700; transition: all 0.3s; margin-bottom:14px;">
+          Style me Change Dekho! 🎨
+        </div>
+        <button class="btn btn-primary" onclick="toggleBig()">🔠 Size Toggle</button>
+        <button class="btn btn-secondary" onclick="toggleDark()">🌓 Color Toggle</button>
+        <button class="btn btn-outline" onclick="toggleSpin()">🌀 Spin</button>
+        <button class="btn btn-outline" onclick="toggleHide()">👁️ Hide/Show</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📐 Computed Style Padhna <span class="tag tag-hard">Advanced</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// CSS se apply hui actual style padhna</span>
+<span class="var">let</span> styles = window.<span class="method">getComputedStyle</span>(el);
+
+console.<span class="method">log</span>(styles.color);        <span class="comment">// rgb(255, 0, 0)</span>
+console.<span class="method">log</span>(styles.width);        <span class="comment">// "200px"</span>
+console.<span class="method">log</span>(styles.fontFamily);   <span class="comment">// Font name</span>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="showSection(7, document.querySelectorAll('.nav-btn')[7])">Aage Badho → Traversal 🔄</button>
+  </div>
+
+  <!-- ===== SECTION 7: TRAVERSAL ===== -->
+  <div class="section" id="sec-7">
+    <div class="section-header">
+      <div class="section-icon">🔄</div>
+      <div>
+        <h2>DOM Traversal</h2>
+        <p>Tree mein navigate karo — parent, child, siblings</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🧭 Navigation Properties <span class="tag tag-medium">Core</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="var">let</span> el = <span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"#child"</span>);
+
+<span class="comment">// PARENT:</span>
+el.parentNode           <span class="comment">// Direct parent node</span>
+el.parentElement        <span class="comment">// Direct parent element</span>
+el.closest(<span class="string">".card"</span>)     <span class="comment">// Upar jaake pehla .card</span>
+
+<span class="comment">// CHILDREN:</span>
+el.children             <span class="comment">// Saare direct children elements</span>
+el.childNodes           <span class="comment">// Saare direct child nodes (text bhi)</span>
+el.firstElementChild    <span class="comment">// Pehla child element</span>
+el.lastElementChild     <span class="comment">// Aakhri child element</span>
+
+<span class="comment">// SIBLINGS:</span>
+el.nextElementSibling   <span class="comment">// Agla sibling</span>
+el.previousElementSibling <span class="comment">// Pichla sibling</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🔁 Saare Children Pe Loop Karo</h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="var">let</span> ul = <span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"ul"</span>);
+
+<span class="comment">// forEach (querySelectorAll pe)</span>
+<span class="var">document</span>.<span class="method">querySelectorAll</span>(<span class="string">"li"</span>).<span class="method">forEach</span>(item =&gt; {
+  console.<span class="method">log</span>(item.textContent);
+});
+
+<span class="comment">// Array se bhi kar sakte ho</span>
+<span class="var">let</span> items = Array.<span class="method">from</span>(ul.children);
+items.<span class="method">forEach</span>(item =&gt; {
+  item.style.color = <span class="string">"orange"</span>;
+});
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎮 Traversal Live Demo</h3>
+      <div class="demo-box">
+        <h4>🧪 Family Explore Karo</h4>
+        <div id="family-tree">
+          <div id="grandparent" style="border:2px solid var(--accent2); border-radius:8px; padding:12px; margin-bottom:8px;">
+            <strong style="color:var(--accent2)">Grandparent (div)</strong>
+            <div id="parent-el" style="border:2px solid var(--accent3); border-radius:8px; padding:12px; margin-top:8px;">
+              <strong style="color:var(--accent3)">Parent (div)</strong>
+              <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+                <span id="child-a" style="border:2px solid var(--accent); border-radius:6px; padding:8px; flex:1; text-align:center; color:var(--accent)">Child A</span>
+                <span id="child-b" style="border:2px solid var(--accent); border-radius:6px; padding:8px; flex:1; text-align:center; color:var(--accent)">Child B</span>
+                <span id="child-c" style="border:2px solid var(--accent); border-radius:6px; padding:8px; flex:1; text-align:center; color:var(--accent)">Child C</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <button class="btn btn-primary" onclick="traverseDemo('parent')">Child B Ka Parent</button>
+        <button class="btn btn-secondary" onclick="traverseDemo('sibling')">Child A Ka Agla Sibling</button>
+        <button class="btn btn-outline" onclick="traverseDemo('children')">Parent Ke Saare Children</button>
+        <div class="output-box" id="traverse-output">→ Button dabao...</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="showSection(8, document.querySelectorAll('.nav-btn')[8])">Aage Badho → Advanced 🚀</button>
+  </div>
+
+  <!-- ===== SECTION 8: ADVANCED ===== -->
+  <div class="section" id="sec-8">
+    <div class="section-header">
+      <div class="section-icon">🚀</div>
+      <div>
+        <h2>Advanced DOM</h2>
+        <p>Real projects mein kaam aane wali techniques</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎯 Event Delegation — Ek Handler, Hazaaron Elements! <span class="tag tag-hard">Advanced</span></h3>
+      <div class="highlight highlight-info">
+        <span class="highlight-icon">💡</span>
+        <div>Har element pe alag-alag listener lagane ki zaroorat nahi! Parent pe ek listener lagao aur bubbling se saare children handle karo. Ye performance ke liye best hai!</div>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// Problem: 100 buttons hain, 100 listeners?? Nahi!</span>
+<span class="comment">// Solution: Parent pe ek listener!</span>
+
+<span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">"#list"</span>)
+  .<span class="method">addEventListener</span>(<span class="string">"click"</span>, (<span class="var">e</span>) =&gt; {
+    
+  <span class="comment">// Check karo click kaun se element pe hua</span>
+  <span class="keyword">if</span> (e.target.matches(<span class="string">"li"</span>)) {
+    console.<span class="method">log</span>(<span class="string">"Li click hua:"</span>, e.target.textContent);
+  }
+  
+  <span class="comment">// Dataset se ID le sakte ho</span>
+  <span class="keyword">if</span> (e.target.dataset.id) {
+    console.<span class="method">log</span>(<span class="string">"ID:"</span>, e.target.dataset.id);
+  }
+});
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🔭 MutationObserver — DOM Changes Ko Watch Karo <span class="tag tag-hard">Pro Level</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// Jab DOM change ho, automatically pata chale</span>
+<span class="var">let</span> observer = <span class="keyword">new</span> <span class="method">MutationObserver</span>(<span class="keyword">function</span>(mutations) {
+  mutations.<span class="method">forEach</span>(mutation =&gt; {
+    console.<span class="method">log</span>(<span class="string">"DOM change hua!"</span>, mutation.type);
+  });
+});
+
+<span class="comment">// Kya observe karna hai batao</span>
+observer.<span class="method">observe</span>(<span class="var">document</span>.body, {
+  childList: <span class="num">true</span>,      <span class="comment">// Children add/remove hone pe</span>
+  attributes: <span class="num">true</span>,    <span class="comment">// Attributes change pe</span>
+  subtree: <span class="num">true</span>        <span class="comment">// Andar ke sab changes pe</span>
+});
+
+observer.<span class="method">disconnect</span>(); <span class="comment">// Band karo</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📐 Element Size aur Position <span class="tag tag-hard">Advanced</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="var">let</span> el = <span class="var">document</span>.<span class="method">querySelector</span>(<span class="string">".box"</span>);
+
+<span class="comment">// Size (with padding, without border)</span>
+el.clientWidth / el.clientHeight
+
+<span class="comment">// Size (with padding + border)</span>
+el.offsetWidth / el.offsetHeight
+
+<span class="comment">// Position relative to parent</span>
+el.offsetLeft / el.offsetTop
+
+<span class="comment">// Exact position on screen</span>
+<span class="var">let</span> rect = el.<span class="method">getBoundingClientRect</span>();
+console.<span class="method">log</span>(rect.top, rect.left, rect.width, rect.height);
+
+<span class="comment">// Scroll position</span>
+window.scrollX   <span class="comment">// Horizontal scroll</span>
+window.scrollY   <span class="comment">// Vertical scroll</span>
+el.<span class="method">scrollIntoView</span>({ behavior: <span class="string">"smooth"</span> }); <span class="comment">// Smooth scroll to</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>⚡ DocumentFragment — Batch Insert <span class="tag tag-hard">Performance</span></h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// Bahut saare elements add karne ho toh:</span>
+<span class="comment">// BAD: Har baar DOM reflow hoga</span>
+<span class="keyword">for</span>(<span class="var">let</span> i=<span class="num">0</span>; i&lt;<span class="num">100</span>; i++) {
+  <span class="var">document</span>.body.<span class="method">appendChild</span>(<span class="var">document</span>.<span class="method">createElement</span>(<span class="string">"div"</span>));
+}
+
+<span class="comment">// GOOD: Pehle fragment mein, phir ek baar add karo</span>
+<span class="var">let</span> frag = <span class="var">document</span>.<span class="method">createDocumentFragment</span>();
+<span class="keyword">for</span>(<span class="var">let</span> i=<span class="num">0</span>; i&lt;<span class="num">100</span>; i++) {
+  frag.<span class="method">appendChild</span>(<span class="var">document</span>.<span class="method">createElement</span>(<span class="string">"div"</span>));
+}
+<span class="var">document</span>.body.<span class="method">appendChild</span>(frag); <span class="comment">// Sirf 1 baar DOM touch!</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎮 Event Delegation Demo</h3>
+      <div class="demo-box">
+        <h4>🧪 Ek Listener, Saare Buttons!</h4>
+        <div id="delegation-list" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;" onclick="delegationClick(event)">
+          <button class="btn btn-outline" data-fruit="🍎" data-name="Seb">🍎 Seb</button>
+          <button class="btn btn-outline" data-fruit="🍌" data-name="Kela">🍌 Kela</button>
+          <button class="btn btn-outline" data-fruit="🍊" data-name="Santra">🍊 Santra</button>
+          <button class="btn btn-outline" data-fruit="🍇" data-name="Angur">🍇 Angur</button>
+          <button class="btn btn-primary" onclick="addFruitBtn()">+ Naya Add Karo</button>
+        </div>
+        <div class="output-box" id="delegation-output">→ Koi bhi fruit click karo (sirf 1 listener hai parent pe!)</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="showSection(9, document.querySelectorAll('.nav-btn')[9])">Aage Badho → Cheatsheet 📋</button>
+  </div>
+
+  <!-- ===== SECTION 9: CHEATSHEET ===== -->
+  <div class="section" id="sec-9">
+    <div class="section-header">
+      <div class="section-icon">📋</div>
+      <div>
+        <h2>DOM Cheatsheet</h2>
+        <p>Saari important methods ek jagah — bookmark kar lo!</p>
+      </div>
+    </div>
+
+    <div class="cheat-grid">
+      <div class="cheat-item">
+        <div class="cheat-title">🔍 Finding</div>
+        <code>getElementById("id")</code><br>
+        <code>querySelector(".cls")</code><br>
+        <code>querySelectorAll("li")</code><br>
+        <span class="desc">Elements dhundna</span>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-title">✏️ Content</div>
+        <code>.textContent = "text"</code><br>
+        <code>.innerHTML = "&lt;b&gt;bold&lt;/b&gt;"</code><br>
+        <code>.value = "input val"</code><br>
+        <span class="desc">Content read/write</span>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-title">🏷️ Attributes</div>
+        <code>.getAttribute("src")</code><br>
+        <code>.setAttribute("id","x")</code><br>
+        <code>.removeAttribute("dis")</code><br>
+        <span class="desc">Tag attributes</span>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-title">🎨 Classes</div>
+        <code>.classList.add("cls")</code><br>
+        <code>.classList.remove("cls")</code><br>
+        <code>.classList.toggle("cls")</code><br>
+        <code>.classList.contains("cls")</code><br>
+        <span class="desc">CSS class management</span>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-title">💅 Styles</div>
+        <code>.style.color = "red"</code><br>
+        <code>.style.fontSize = "20px"</code><br>
+        <code>getComputedStyle(el)</code><br>
+        <span class="desc">Inline styles</span>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-title">➕ Create</div>
+        <code>createElement("div")</code><br>
+        <code>createTextNode("text")</code><br>
+        <code>parent.appendChild(el)</code><br>
+        <code>parent.prepend(el)</code><br>
+        <span class="desc">Naye nodes banana</span>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-title">🗑️ Remove</div>
+        <code>el.remove()</code><br>
+        <code>parent.removeChild(el)</code><br>
+        <code>el.innerHTML = ""</code><br>
+        <span class="desc">Nodes hatana</span>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-title">🔄 Traverse</div>
+        <code>.parentElement</code><br>
+        <code>.children</code><br>
+        <code>.nextElementSibling</code><br>
+        <code>.firstElementChild</code><br>
+        <span class="desc">Tree navigation</span>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-title">⚡ Events</div>
+        <code>addEventListener("click",fn)</code><br>
+        <code>removeEventListener("click",fn)</code><br>
+        <code>e.preventDefault()</code><br>
+        <code>e.stopPropagation()</code><br>
+        <span class="desc">Event handling</span>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-title">📐 Size/Pos</div>
+        <code>getBoundingClientRect()</code><br>
+        <code>.offsetWidth / .offsetHeight</code><br>
+        <code>.scrollTop / .scrollLeft</code><br>
+        <span class="desc">Position & dimensions</span>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-title">🌐 Document</div>
+        <code>document.body</code><br>
+        <code>document.head</code><br>
+        <code>document.title = "x"</code><br>
+        <code>document.URL</code><br>
+        <span class="desc">Document properties</span>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-title">🔬 Check</div>
+        <code>.nodeType === 1</code><br>
+        <code>.nodeName</code><br>
+        <code>.children.length</code><br>
+        <code>.matches(".cls")</code><br>
+        <span class="desc">Node inspection</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h3>⭐ DOMContentLoaded — Hamesha Yad Rakho!</h3>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<span class="comment">// HTML parse hone ke baad JS chalao</span>
+<span class="var">document</span>.<span class="method">addEventListener</span>(<span class="string">"DOMContentLoaded"</span>, () =&gt; {
+  <span class="comment">// Yahan sab JS likho — elements ready hain!</span>
+  console.<span class="method">log</span>(<span class="string">"DOM ready hai, shuru karo!"</span>);
+});
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="showSection(10, document.querySelectorAll('.nav-btn')[10])">Chalo Quiz Dein 🧠</button>
+  </div>
+
+  <!-- ===== SECTION 10: QUIZ ===== -->
+  <div class="section" id="sec-10">
+    <div class="section-header">
+      <div class="section-icon">🧠</div>
+      <div>
+        <h2>DOM Quiz</h2>
+        <p>Kitna seekha? Test karo apne aap ko!</p>
+      </div>
+    </div>
+
+    <div id="quiz-score-card" style="background:var(--surface); border-radius:var(--radius); padding:16px 24px; margin-bottom:20px; display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+      <div>Score: <strong id="quiz-score" style="color:var(--accent); font-size:1.4rem;">0</strong> / <span id="quiz-total">7</span></div>
+      <div style="color:var(--muted); font-size:14px;">Sahi jawab green mein, galat red mein dikhenga</div>
+      <button class="btn btn-outline" onclick="resetQuiz()" style="margin-left:auto;">🔄 Reset</button>
+    </div>
+
+    <!-- Q1 -->
+    <div class="quiz-q" id="q1">
+      <h4>1️⃣ DOM ka poora naam kya hai?</h4>
+      <button class="quiz-option" onclick="answer(this, false, 'q1')">Document Output Model</button>
+      <button class="quiz-option" onclick="answer(this, true, 'q1')">Document Object Model</button>
+      <button class="quiz-option" onclick="answer(this, false, 'q1')">Data Object Method</button>
+      <div class="quiz-feedback" id="q1-fb"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-q" id="q2">
+      <h4>2️⃣ Sirf PEHLA matching element kaunsa method return karta hai?</h4>
+      <button class="quiz-option" onclick="answer(this, false, 'q2')">querySelectorAll()</button>
+      <button class="quiz-option" onclick="answer(this, true, 'q2')">querySelector()</button>
+      <button class="quiz-option" onclick="answer(this, false, 'q2')">getElementsByClassName()</button>
+      <div class="quiz-feedback" id="q2-fb"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-q" id="q3">
+      <h4>3️⃣ Kaunsa method HTML tags bhi content mein add kar sakta hai?</h4>
+      <button class="quiz-option" onclick="answer(this, false, 'q3')">textContent</button>
+      <button class="quiz-option" onclick="answer(this, false, 'q3')">innerText</button>
+      <button class="quiz-option" onclick="answer(this, true, 'q3')">innerHTML</button>
+      <div class="quiz-feedback" id="q3-fb"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-q" id="q4">
+      <h4>4️⃣ Kisi element ko hamesha ke liye hatane ka modern tarika kya hai?</h4>
+      <button class="quiz-option" onclick="answer(this, false, 'q4')">element.delete()</button>
+      <button class="quiz-option" onclick="answer(this, true, 'q4')">element.remove()</button>
+      <button class="quiz-option" onclick="answer(this, false, 'q4')">document.remove(element)</button>
+      <div class="quiz-feedback" id="q4-fb"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-q" id="q5">
+      <h4>5️⃣ Class toggle karne ke liye kya use karenge?</h4>
+      <button class="quiz-option" onclick="answer(this, false, 'q5')">element.class.toggle()</button>
+      <button class="quiz-option" onclick="answer(this, false, 'q5')">element.style.toggle()</button>
+      <button class="quiz-option" onclick="answer(this, true, 'q5')">element.classList.toggle()</button>
+      <div class="quiz-feedback" id="q5-fb"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-q" id="q6">
+      <h4>6️⃣ Event bubbling ka matlab kya hai?</h4>
+      <button class="quiz-option" onclick="answer(this, false, 'q6')">Event automatically delete ho jaata hai</button>
+      <button class="quiz-option" onclick="answer(this, true, 'q6')">Child ka event parent tak pahucha jaata hai</button>
+      <button class="quiz-option" onclick="answer(this, false, 'q6')">Event slow ho jaata hai</button>
+      <div class="quiz-feedback" id="q6-fb"></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="quiz-q" id="q7">
+      <h4>7️⃣ Kisi element ke saare direct children kaise milte hain?</h4>
+      <button class="quiz-option" onclick="answer(this, false, 'q7')">element.childrenAll</button>
+      <button class="quiz-option" onclick="answer(this, false, 'q7')">element.getChildren()</button>
+      <button class="quiz-option" onclick="answer(this, true, 'q7')">element.children</button>
+      <div class="quiz-feedback" id="q7-fb"></div>
+    </div>
+
+    <div id="quiz-result" style="display:none; margin-top:20px; padding:24px; background:var(--surface); border-radius:var(--radius); text-align:center;">
+      <div style="font-size:3rem; margin-bottom:10px;" id="quiz-emoji">🎉</div>
+      <div style="font-size:1.4rem; font-weight:700; margin-bottom:8px;" id="quiz-message">Shandaar!</div>
+      <div style="color:var(--muted); margin-bottom:16px;" id="quiz-sub"></div>
+      <button class="btn btn-primary" onclick="resetQuiz()">Dobara Try Karo</button>
+    </div>
+  </div>
+
+</div><!-- end .main -->
+
+<!-- FLOATING COUNTER -->
+<div id="live-counter">Sections: <span id="done-count">1</span>/11 done</div>
+
+<script>
+// ============ PROGRESS & NAVIGATION ============
+let visited = new Set([0]);
+const totalSections = 11;
+
+function showSection(i, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + i).classList.add('active');
+  btn.classList.add('active');
+  visited.add(i);
+  updateProgress();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function updateProgress() {
+  const pct = Math.round((visited.size / totalSections) * 100);
+  document.getElementById('mainProgress').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = pct + '% Complete';
+  document.getElementById('done-count').textContent = visited.size;
+}
+
+// ============ SECTION 0 DEMOS ============
+let demoTexts = ["Main DOM ka element hoon! 👋", "Text change ho gaya! 🎉", "Aur fir se badla! ✨"];
+let demoColors = ["var(--accent2)", "var(--accent)", "var(--accent3)", "var(--green)"];
+let textIdx = 0, colorIdx = 0;
+
+function changeText() {
+  textIdx = (textIdx + 1) % demoTexts.length;
+  const el = document.getElementById('demo-element');
+  el.textContent = demoTexts[textIdx];
+  el.style.transform = 'scale(1.05)';
+  setTimeout(() => el.style.transform = 'scale(1)', 300);
+  document.getElementById('demo-output').textContent = '→ el.textContent = "' + demoTexts[textIdx] + '" -- DOM ne text badal diya!';
+}
+
+function changeColor() {
+  colorIdx = (colorIdx + 1) % demoColors.length;
+  document.getElementById('demo-element').style.color = demoColors[colorIdx];
+  document.getElementById('demo-output').textContent = '→ el.style.color = "' + demoColors[colorIdx] + '" -- Rang badla!';
+}
+
+function resetDemo() {
+  document.getElementById('demo-element').textContent = "Main DOM ka element hoon! 👋";
+  document.getElementById('demo-element').style.color = "var(--accent2)";
+  document.getElementById('demo-output').textContent = "→ Reset ho gaya! Phir try karo...";
+  textIdx = 0; colorIdx = 0;
+}
+
+// ============ SECTION 1 DEMOS ============
+function inspectNode(id) {
+  const el = document.getElementById(id);
+  const info = `tagName: ${el.tagName} | textContent: "${el.textContent}" | nodeType: ${el.nodeType} | className: "${el.className}"`;
+  document.getElementById('tree-output').textContent = '→ ' + info;
+  el.style.outline = '2px solid var(--accent)';
+  el.style.borderRadius = '4px';
+  setTimeout(() => { el.style.outline = ''; el.style.borderRadius = ''; }, 1500);
+}
+
+// ============ SECTION 2 DEMOS ============
+function selDemo(type, selector) {
+  resetSel();
+  if(type === 'getElementById') {
+    const el = document.getElementById(selector);
+    if(el) { el.style.background = 'rgba(255,107,53,0.3)'; el.style.color = 'var(--accent)'; }
+    document.getElementById('sel-output').textContent = '→ getElementById("' + selector + '") → Ek element mila: "' + (el ? el.textContent : 'null') + '"';
+  } else {
+    const els = document.querySelectorAll(selector);
+    els.forEach(el => { el.style.background = 'rgba(78,205,196,0.3)'; el.style.color = 'var(--accent2)'; });
+    document.getElementById('sel-output').textContent = '→ querySelectorAll("' + selector + '") → ' + els.length + ' elements mile!';
+  }
+}
+
+function resetSel() {
+  document.querySelectorAll('.demo-text').forEach(el => { el.style.background = 'var(--surface)'; el.style.color = 'var(--text)'; });
+}
+
+// ============ SECTION 3 DEMOS ============
+function changeContent(type) {
+  const target = document.getElementById('edit-target');
+  const val = document.getElementById('new-text-input').value || "Kuch nahi likha!";
+  if(type === 'text') { target.textContent = val; }
+  else { target.innerHTML = val; }
+}
+
+// ============ SECTION 4 DEMOS ============
+function eventDemo(el, type) {
+  const colors = { click:'rgba(255,107,53,0.3)', dblclick:'rgba(255,77,109,0.3)', mouseover:'rgba(78,205,196,0.15)', mouseout:'var(--surface)' };
+  el.style.background = colors[type] || 'var(--surface2)';
+  document.getElementById('event-output').textContent = '→ Event: "' + type + '" fire hua! e.type = "' + type + '"';
+}
+
+function keyDemo(el) {
+  document.getElementById('event-output').textContent = '→ "input" event! Value: "' + el.value + '" | Length: ' + el.value.length;
+}
+
+// ============ SECTION 5 DEMOS ============
+let itemCount = 0;
+let itemContainer;
+
+function getContainer() {
+  if(!itemContainer) {
+    itemContainer = document.getElementById('item-container');
+    itemContainer.innerHTML = '';
+  }
+  return itemContainer;
+}
+
+function addItem() {
+  const val = document.getElementById('new-item-input').value || ('Item ' + (itemCount+1));
+  const c = getContainer();
+  const el = document.createElement('span');
+  el.textContent = val;
+  el.style.cssText = 'padding:8px 14px; background:var(--accent); color:white; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; animation: fadeIn 0.3s ease;';
+  el.title = 'Click to remove';
+  el.onclick = function() { this.remove(); itemCount--; updateCount(); };
+  c.appendChild(el);
+  itemCount++;
+  updateCount();
+  document.getElementById('new-item-input').value = '';
+}
+
+function removeLastItem() {
+  const c = getContainer();
+  if(c.lastElementChild) { c.lastElementChild.remove(); itemCount = Math.max(0, itemCount-1); updateCount(); }
+  else { document.getElementById('add-output').textContent = 'Container already empty!'; }
+}
+
+function clearAll() {
+  getContainer().innerHTML = '';
+  itemCount = 0;
+  updateCount();
+  itemContainer = null;
+}
+
+function updateCount() {
+  const c = document.getElementById('item-container');
+  document.getElementById('add-output').textContent = 'Count: ' + (c ? c.children.length : 0) + ' elements | DOM mein live hai!';
+}
+
+// ============ SECTION 6 DEMOS ============
+let isBig = false, isDark = false, isSpinning = false, isHidden = false;
+
+function toggleBig() {
+  const el = document.getElementById('style-target');
+  isBig = !isBig;
+  el.style.fontSize = isBig ? '26px' : '18px';
+  el.style.padding = isBig ? '28px' : '20px';
+}
+
+function toggleDark() {
+  const el = document.getElementById('style-target');
+  isDark = !isDark;
+  el.style.background = isDark ? 'var(--accent)' : 'var(--surface)';
+  el.style.color = isDark ? 'white' : 'var(--text)';
+}
+
+function toggleSpin() {
+  const el = document.getElementById('style-target');
+  isSpinning = !isSpinning;
+  el.style.transform = isSpinning ? 'rotate(5deg)' : 'rotate(0)';
+  el.style.transition = 'all 0.3s ease';
+}
+
+function toggleHide() {
+  const el = document.getElementById('style-target');
+  isHidden = !isHidden;
+  el.style.opacity = isHidden ? '0' : '1';
+  el.style.pointerEvents = isHidden ? 'none' : 'all';
+}
+
+// ============ SECTION 7 DEMOS ============
+function traverseDemo(type) {
+  const out = document.getElementById('traverse-output');
+  const parent = document.getElementById('parent-el');
+  const childB = document.getElementById('child-b');
+  const childA = document.getElementById('child-a');
+
+  document.querySelectorAll('#family-tree *').forEach(el => {
+    el.style.outline = '';
+    el.style.background = '';
+  });
+
+  if(type === 'parent') {
+    const p = childB.parentElement;
+    p.style.outline = '3px solid var(--accent)';
+    out.textContent = '→ childB.parentElement = <' + p.tagName + '> id="' + p.id + '"';
+  }
+  else if(type === 'sibling') {
+    const next = childA.nextElementSibling;
+    next.style.outline = '3px solid var(--green)';
+    out.textContent = '→ childA.nextElementSibling = Element id="' + next.id + '" text="' + next.textContent.trim() + '"';
+  }
+  else if(type === 'children') {
+    const children = parent.children;
+    out.textContent = '→ parent.children.length = ' + children.length + ' | [' + Array.from(children).map(c=>c.id||c.tagName).join(', ') + ']';
+    Array.from(children).forEach(c => c.style.outline = '2px solid var(--accent3)');
+  }
+}
+
+// ============ SECTION 8 DEMOS ============
+let fruitCount = 4;
+const fruits = [{emoji:'🥭',name:'Aam'},{emoji:'🍋',name:'Nimbu'},{emoji:'🍑',name:'Aadu'},{emoji:'🫐',name:'Blueberry'}];
+
+function delegationClick(e) {
+  if(e.target.dataset.name) {
+    const out = document.getElementById('delegation-output');
+    out.textContent = '→ e.target: ' + e.target.dataset.fruit + ' ' + e.target.dataset.name + ' click hua! (Sirf ek listener parent pe tha)';
+    e.target.style.transform = 'scale(1.1)';
+    setTimeout(() => e.target.style.transform = '', 200);
+  }
+}
+
+function addFruitBtn() {
+  const f = fruits[fruitCount % fruits.length];
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-outline';
+  btn.dataset.fruit = f.emoji;
+  btn.dataset.name = f.name;
+  btn.textContent = f.emoji + ' ' + f.name;
+  document.getElementById('delegation-list').insertBefore(btn, document.querySelector('#delegation-list button:last-child'));
+  fruitCount++;
+  document.getElementById('delegation-output').textContent = '→ Naya button add hua — automatically event delegation kaam karta hai, koi naya listener nahi lagaya!';
+}
+
+// ============ QUIZ ============
+let quizScore = 0;
+let answered = new Set();
+
+function answer(btn, correct, qId) {
+  if(answered.has(qId)) return;
+  answered.add(qId);
+
+  const allBtns = btn.parentElement.querySelectorAll('.quiz-option');
+  allBtns.forEach(b => b.disabled = true);
+
+  if(correct) {
+    btn.classList.add('correct');
+    document.getElementById(qId + '-fb').textContent = '✅ Bilkul sahi!';
+    document.getElementById(qId + '-fb').style.color = 'var(--green)';
+    quizScore++;
+    document.getElementById('quiz-score').textContent = quizScore;
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById(qId + '-fb').textContent = '❌ Galat! Sahi jawab green mein hoga.';
+    document.getElementById(qId + '-fb').style.color = 'var(--red)';
+    allBtns.forEach(b => { if(b.onclick.toString().includes('true')) b.classList.add('correct'); });
+  }
+
+  if(answered.size === 7) showResult();
+}
+
+function showResult() {
+  const resultDiv = document.getElementById('quiz-result');
+  resultDiv.style.display = 'block';
+  const emojis = ['😅','😊','🙂','😎','🔥','🌟','🏆'];
+  const msgs = ['Aur practice karo!','Theek hai, thoda aur padho','Accha start!','Bahut accha!','Shandaar!','Outstanding!','DOM Master!'];
+  const i = quizScore;
+  document.getElementById('quiz-emoji').textContent = emojis[i];
+  document.getElementById('quiz-message').textContent = msgs[i];
+  document.getElementById('quiz-sub').textContent = quizScore + ' / 7 sahi jawab. ' + (quizScore === 7 ? 'Tum DOM master ban gaye!' : 'Wapis sections padho aur dobara try karo!');
+}
+
+function resetQuiz() {
+  quizScore = 0;
+  answered.clear();
+  document.getElementById('quiz-score').textContent = 0;
+  document.getElementById('quiz-result').style.display = 'none';
+  document.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.classList.remove('correct', 'wrong');
+    btn.disabled = false;
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(fb => { fb.textContent = ''; });
+}
+
+// ============ COPY CODE ============
+function copyCode(btn) {
+  const block = btn.closest('.code-block');
+  const text = block.innerText.replace('Copy\n','').replace('Copied!\n','');
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.style.background = 'var(--green)';
+    btn.style.color = '#0d0f1a';
+    setTimeout(() => { btn.textContent = 'Copy'; btn.style.background = ''; btn.style.color = ''; }, 2000);
+  });
+}
+
+// Init
+updateProgress();
+</script>
+</body>
+</html>
