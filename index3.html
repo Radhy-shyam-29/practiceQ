@@ -1,24 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <form class="form">
-        <input type="text">
-    </form>
+  </head>
 
+  <body>
     <script>
-        let form = document.querySelector(".form");
+      let table = document.createElement("table");
+      let tbody = document.createElement("tbody");
+      let tr = document.createElement("tr");
+      let th1 = document.createElement("th");
+      let th2 = document.createElement("th");
 
-        form.addEventListener("click", (e)=>{
-            console.log(e)
-        })
+      th1.innerText = "row1 cell1";
+      th2.innerText = "row1 cell2";
 
-        console.log(form);
+      table.append(tbody);
+      tbody.append(tr);
+      tr.append(th1, th2);
+
+      table.style.border = "1px solid black";
+
+      document.body.append(table);
+
+      let btn = document.createElement("button");
+
+      btn.innerText = "create new row";
+
+      document.body.append(btn);
+
+      btn.addEventListener("click", () => {
+        let tr = document.createElement("tr");
+        let th1 = document.createElement("th");
+        let th2 = document.createElement("th");
+        th1.innerText = "row1 cell1";
+        th2.innerText = "row1 cell2";
+        tr.append(th1, th2);
+        tbody.append(tr);
+      });
+      
     </script>
-
-</body>
+  </body>
 </html>

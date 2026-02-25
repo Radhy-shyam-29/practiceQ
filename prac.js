@@ -1118,3 +1118,27 @@ Try karo:
 5. Temperature conversion with rounding
    Example: Celsius to Fahrenheit with 1 decimal place
 `);
+
+
+// parseint 
+
+// let str = ' 123.55 ab345c  '
+// function khud(str){
+// let result = 0
+// for(let i=0; i<str.length; i++){
+//   if(str[i] == ' ' ){
+//     continue
+//   }
+//   if(str[i] < '0' || str[i] > '9'){
+//     return result
+//   }
+//   if(str[i] == '.'){
+//     return result
+//   }
+  
+//   result = result *10 + (str[i] - '0')
+ 
+// }
+//  return result
+// }
+// console.log(khud(str))
